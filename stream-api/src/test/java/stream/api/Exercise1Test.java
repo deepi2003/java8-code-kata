@@ -9,10 +9,12 @@ import org.junit.Test;
 
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.ObjIntConsumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.util.stream.Collectors.toList;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.*;
@@ -27,11 +29,10 @@ public class Exercise1Test extends ClassicOnlineStore {
          * Create a {@link Stream} from customerList only including customer who has more budget than 10000.
          * Use lambda expression for Predicate and {@link Stream#filter} for filtering.
          */
-        Predicate<Customer> richCustomerCondition = null;
-        Stream<Customer> richCustomerStream = null;
 
-        assertTrue("Solution for Predicate should be lambda expression", AssertUtil.isLambda(richCustomerCondition));
-        List<Customer> richCustomer = richCustomerStream.collect(Collectors.toList());
+        List<Customer> richCustomer = customerList.stream()
+                .filter( customer -> customer.getBudget() > 10000)
+                .collect(toList());
         assertThat(richCustomer, hasSize(2));
         assertThat(richCustomer, contains(customerList.get(3), customerList.get(7)));
     }
@@ -48,8 +49,9 @@ public class Exercise1Test extends ClassicOnlineStore {
         Function<Customer, Integer> getAgeFunction = null;
         Stream<Integer> ageStream = null;
 
-        assertTrue(AssertUtil.isLambda(getAgeFunction));
-        List<Integer> ages = ageStream.collect(Collectors.toList());
+        List<Integer> ages = customerList.stream()
+                .map(customer -> customer.getAge())
+                .collect(toList());
         assertThat(ages, hasSize(10));
         assertThat(ages, contains(22, 27, 28, 38, 26, 22, 32, 35, 21, 36));
     }
